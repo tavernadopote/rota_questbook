@@ -1,0 +1,20 @@
+{
+  "item.rota_questbook.questbook": "Questbook",
+  "gui.rota_questbook.title": "Rota Questbook",
+  "gui.rota_questbook.summary": "Chronicles Index",
+  "gui.rota_questbook.claim": "Claim Reward",
+  "gui.rota_questbook.claimed": "Reward Claimed",
+  "gui.rota_questbook.objectives": "OBJECTIVES:",
+  "gui.rota_questbook.rewards": "REWARDS:",
+  "gui.rota_questbook.lore": "CHRONICLE & LORE",
+  "gui.rota_questbook.prev_page": "Previous Page",
+  "gui.rota_questbook.next_page": "Next Page",
+  "config.rota_questbook.title": "Rota Questbook - Settings",
+  "config.rota_questbook.replace_advancements": "Replace Advancements Screen (L)",
+  "config.rota_questbook.page_flip_sound": "Page Flip Sound Effect",
+  "config.rota_questbook.toast_completion": "Completion Toasts",
+  "config.rota_questbook.give_book_first_join": "Give Book on First Join",
+  "config.rota_questbook.import_vanilla": "Import Vanilla Advancements",
+  "config.rota_questbook.import_mods": "Import Mod Advancements",
+  "config.rota_questbook.done": "Done"
+}

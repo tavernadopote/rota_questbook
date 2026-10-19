@@ -1,0 +1,20 @@
+{
+  "item.rota_questbook.questbook": "Livro de Missões",
+  "gui.rota_questbook.title": "Rota Questbook",
+  "gui.rota_questbook.summary": "Sumário de Aventuras",
+  "gui.rota_questbook.claim": "Resgatar Recompensa",
+  "gui.rota_questbook.claimed": "Recompensa Resgatada",
+  "gui.rota_questbook.objectives": "OBJETIVOS:",
+  "gui.rota_questbook.rewards": "RECOMPENSAS:",
+  "gui.rota_questbook.lore": "CRÔNICA & HISTÓRIA",
+  "gui.rota_questbook.prev_page": "Página Anterior",
+  "gui.rota_questbook.next_page": "Próxima Página",
+  "config.rota_questbook.title": "Rota Questbook - Configurações",
+  "config.rota_questbook.replace_advancements": "Substituir Tela de Conquistas (L)",
+  "config.rota_questbook.page_flip_sound": "Efeito Sonoro de Folhear",
+  "config.rota_questbook.toast_completion": "Notificações na Tela",
+  "config.rota_questbook.give_book_first_join": "Entregar Livro ao Entrar",
+  "config.rota_questbook.import_vanilla": "Importar Conquistas Vanilla",
+  "config.rota_questbook.import_mods": "Importar Conquistas de Mods",
+  "config.rota_questbook.done": "Concluído"
+}
