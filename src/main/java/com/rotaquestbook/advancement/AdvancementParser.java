@@ -91,12 +91,9 @@ public class AdvancementParser {
 
                     ResourceLocation iconLoc = BuiltInRegistries.ITEM.getKey(display.getIcon().getItem());
 
-                    // Converte os critérios em requisitos básicos de exibição
+                    // Converte o objetivo da conquista em requisito direto e legível
                     List<QuestRequirement> reqs = new ArrayList<>();
-                    for (String criterionName : current.value().criteria().keySet()) {
-                        reqs.add(new QuestRequirement.ExploreRequirement("advancement_criterion",
-                                ResourceLocation.fromNamespaceAndPath(current.id().getNamespace(), criterionName)));
-                    }
+                    reqs.add(new QuestRequirement.AdvancementRequirement(current.id(), display.getTitle().getString()));
 
                     Quest quest = new Quest(
                             current.id(),

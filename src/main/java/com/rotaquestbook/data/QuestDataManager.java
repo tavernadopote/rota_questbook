@@ -65,13 +65,20 @@ public class QuestDataManager extends SimpleJsonResourceReloadListener {
         }
     }
 
+    private ResourceLocation safeParse(String str, ResourceLocation fallback) {
+        if (str == null || str.isBlank()) return fallback;
+        ResourceLocation res = ResourceLocation.tryParse(str);
+        return res != null ? res : fallback;
+    }
+
     private void parseChapter(ResourceLocation id, JsonObject obj) {
         String title = obj.has("chapter_title") ? obj.get("chapter_title").getAsString() : id.getPath();
-        ResourceLocation icon = obj.has("icon") ? ResourceLocation.parse(obj.get("icon").getAsString()) : ResourceLocation.withDefaultNamespace("book");
+        ResourceLocation icon = safeParse(obj.has("icon") ? obj.get("icon").getAsString() : null, ResourceLocation.withDefaultNamespace("book"));
         List<ResourceLocation> questIds = new ArrayList<>();
         if (obj.has("quests") && obj.get("quests").isJsonArray()) {
             for (JsonElement qe : obj.getAsJsonArray("quests")) {
-                questIds.add(ResourceLocation.parse(qe.getAsString()));
+                ResourceLocation qId = safeParse(qe.getAsString(), null);
+                if (qId != null) questIds.add(qId);
             }
         }
         Chapter chapter = new Chapter(id, title, icon, questIds);
@@ -81,14 +88,15 @@ public class QuestDataManager extends SimpleJsonResourceReloadListener {
 
     private void parseQuest(ResourceLocation id, JsonObject obj) {
         String title = obj.has("title") ? obj.get("title").getAsString() : id.getPath();
-        ResourceLocation icon = obj.has("icon") ? ResourceLocation.parse(obj.get("icon").getAsString()) : ResourceLocation.withDefaultNamespace("book");
+        ResourceLocation icon = safeParse(obj.has("icon") ? obj.get("icon").getAsString() : null, ResourceLocation.withDefaultNamespace("book"));
         String description = obj.has("description") ? obj.get("description").getAsString() : "";
-        ResourceLocation chapterId = obj.has("chapter") ? ResourceLocation.parse(obj.get("chapter").getAsString()) : ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "main");
+        ResourceLocation chapterId = safeParse(obj.has("chapter") ? obj.get("chapter").getAsString() : null, ResourceLocation.fromNamespaceAndPath(id.getNamespace(), "main"));
 
         List<ResourceLocation> deps = new ArrayList<>();
         if (obj.has("dependencies") && obj.get("dependencies").isJsonArray()) {
             for (JsonElement de : obj.getAsJsonArray("dependencies")) {
-                deps.add(ResourceLocation.parse(de.getAsString()));
+                ResourceLocation dId = safeParse(de.getAsString(), null);
+                if (dId != null) deps.add(dId);
             }
         }
 
@@ -98,14 +106,18 @@ public class QuestDataManager extends SimpleJsonResourceReloadListener {
                 if (re.isJsonObject()) {
                     JsonObject rObj = re.getAsJsonObject();
                     String type = rObj.has("type") ? rObj.get("type").getAsString() : "item";
-                    if ("item".equalsIgnoreCase(type)) {
-                        ResourceLocation itemLoc = ResourceLocation.parse(rObj.get("item").getAsString());
-                        int count = rObj.has("count") ? rObj.get("count").getAsInt() : 1;
-                        reqs.add(new QuestRequirement.ItemRequirement(itemLoc, count));
-                    } else if ("kill".equalsIgnoreCase(type)) {
-                        ResourceLocation entityLoc = ResourceLocation.parse(rObj.get("entity").getAsString());
-                        int count = rObj.has("count") ? rObj.get("count").getAsInt() : 1;
-                        reqs.add(new QuestRequirement.KillRequirement(entityLoc, count));
+                    if ("item".equalsIgnoreCase(type) && rObj.has("item")) {
+                        ResourceLocation itemLoc = safeParse(rObj.get("item").getAsString(), null);
+                        if (itemLoc != null) {
+                            int count = rObj.has("count") ? rObj.get("count").getAsInt() : 1;
+                            reqs.add(new QuestRequirement.ItemRequirement(itemLoc, count));
+                        }
+                    } else if ("kill".equalsIgnoreCase(type) && rObj.has("entity")) {
+                        ResourceLocation entityLoc = safeParse(rObj.get("entity").getAsString(), null);
+                        if (entityLoc != null) {
+                            int count = rObj.has("count") ? rObj.get("count").getAsInt() : 1;
+                            reqs.add(new QuestRequirement.KillRequirement(entityLoc, count));
+                        }
                     }
                 }
             }
@@ -117,10 +129,12 @@ public class QuestDataManager extends SimpleJsonResourceReloadListener {
                 if (rwe.isJsonObject()) {
                     JsonObject rwObj = rwe.getAsJsonObject();
                     String type = rwObj.has("type") ? rwObj.get("type").getAsString() : "item";
-                    if ("item".equalsIgnoreCase(type)) {
-                        ResourceLocation itemLoc = ResourceLocation.parse(rwObj.get("item").getAsString());
-                        int count = rwObj.has("count") ? rwObj.get("count").getAsInt() : 1;
-                        rewards.add(new QuestReward.ItemReward(itemLoc, count));
+                    if ("item".equalsIgnoreCase(type) && rwObj.has("item")) {
+                        ResourceLocation itemLoc = safeParse(rwObj.get("item").getAsString(), null);
+                        if (itemLoc != null) {
+                            int count = rwObj.has("count") ? rwObj.get("count").getAsInt() : 1;
+                            rewards.add(new QuestReward.ItemReward(itemLoc, count));
+                        }
                     } else if ("xp".equalsIgnoreCase(type)) {
                         int points = rwObj.has("points") ? rwObj.get("points").getAsInt() : 50;
                         boolean levels = rwObj.has("levels") && rwObj.get("levels").getAsBoolean();

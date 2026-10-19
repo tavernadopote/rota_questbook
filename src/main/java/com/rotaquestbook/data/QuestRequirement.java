@@ -153,4 +153,48 @@ public interface QuestRequirement {
             return json;
         }
     }
+
+    /**
+     * Requisito baseado em Conquistas / Avanços do Minecraft.
+     */
+    record AdvancementRequirement(ResourceLocation advancementId, String description) implements QuestRequirement {
+        @Override
+        public String getType() {
+            return "advancement";
+        }
+
+        @Override
+        public String getTitle() {
+            return description != null && !description.isBlank() ? description : "Completar desafio";
+        }
+
+        @Override
+        public int getTargetAmount() {
+            return 1;
+        }
+
+        @Override
+        public int getCurrentAmount(ServerPlayer player) {
+            if (player == null || player.server == null) return 0;
+            var adv = player.server.getAdvancements().get(advancementId);
+            if (adv != null && player.getAdvancements().getOrStartProgress(adv).isDone()) {
+                return 1;
+            }
+            return 0;
+        }
+
+        @Override
+        public boolean isSatisfied(ServerPlayer player) {
+            return getCurrentAmount(player) >= 1;
+        }
+
+        @Override
+        public JsonObject toJson() {
+            JsonObject json = new JsonObject();
+            json.addProperty("type", "advancement");
+            json.addProperty("advancement", advancementId.toString());
+            json.addProperty("description", description);
+            return json;
+        }
+    }
 }
