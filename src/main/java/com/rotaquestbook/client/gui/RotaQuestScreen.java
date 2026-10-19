@@ -5,6 +5,7 @@ import com.rotaquestbook.data.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Renderable;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -132,8 +133,10 @@ public class RotaQuestScreen extends Screen {
             }
         }
 
-        // 3. Renderiza botões e widgets sobrepostos
-        super.render(guiGraphics, mouseX, mouseY, partialTick);
+        // 3. Renderiza botões e widgets sobrepostos (sem chamar super.render para não reaplicar o desfoque pós-processado sobre o livro)
+        for (Renderable renderable : this.renderables) {
+            renderable.render(guiGraphics, mouseX, mouseY, partialTick);
+        }
 
         // Tooltips dos cantos de virar página
         if (this.prevButton.isHoveredOrFocused() && this.prevButton.visible) {
